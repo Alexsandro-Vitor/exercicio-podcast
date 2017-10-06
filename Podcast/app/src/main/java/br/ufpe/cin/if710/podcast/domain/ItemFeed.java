@@ -1,8 +1,11 @@
 package br.ufpe.cin.if710.podcast.domain;
 
 import android.content.ContentValues;
+import android.database.Cursor;
+import android.os.Bundle;
 
 import br.ufpe.cin.if710.podcast.db.PodcastDBHelper;
+import br.ufpe.cin.if710.podcast.db.PodcastProviderContract;
 
 public class ItemFeed {
     private final String title;
@@ -18,6 +21,18 @@ public class ItemFeed {
         this.pubDate = pubDate;
         this.description = description;
         this.downloadLink = downloadLink;
+    }
+
+    public ItemFeed(Cursor cursor) {
+        title = getColValue(cursor, PodcastProviderContract.TITLE);
+        link = getColValue(cursor, PodcastProviderContract.LINK);
+        pubDate = getColValue(cursor, PodcastProviderContract.DATE);
+        description = getColValue(cursor, PodcastProviderContract.DESC);
+        downloadLink = getColValue(cursor, PodcastProviderContract.DOWNLOAD_LINK);
+    }
+
+    private String getColValue(Cursor cursor, String col) {
+        return cursor.getString(cursor.getColumnIndex(col));
     }
 
     public String getTitle() {
@@ -42,12 +57,12 @@ public class ItemFeed {
 
     public ContentValues toCV() {
         ContentValues cv = new ContentValues();
-        cv.put(PodcastDBHelper.EPISODE_TITLE, valid(title));
-        cv.put(PodcastDBHelper.EPISODE_LINK, valid(link));
-        cv.put(PodcastDBHelper.EPISODE_DATE, valid(pubDate));
-        cv.put(PodcastDBHelper.EPISODE_DESC, valid(description));
-        cv.put(PodcastDBHelper.EPISODE_DOWNLOAD_LINK, valid(downloadLink));
-        cv.put(PodcastDBHelper.EPISODE_FILE_URI, "");
+        cv.put(PodcastProviderContract.TITLE, valid(title));
+        cv.put(PodcastProviderContract.LINK, valid(link));
+        cv.put(PodcastProviderContract.DATE, valid(pubDate));
+        cv.put(PodcastProviderContract.DESC, valid(description));
+        cv.put(PodcastProviderContract.DOWNLOAD_LINK, valid(downloadLink));
+        cv.put(PodcastProviderContract.FILE_URI, "");
         return cv;
     }
 

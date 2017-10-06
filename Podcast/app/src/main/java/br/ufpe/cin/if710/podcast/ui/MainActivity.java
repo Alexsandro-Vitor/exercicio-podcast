@@ -2,6 +2,7 @@ package br.ufpe.cin.if710.podcast.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -91,16 +92,19 @@ public class MainActivity extends Activity {
             List<ItemFeed> itemList = new ArrayList<>();
             try {
                 itemList = XmlFeedParser.parse(getRssFeed(params[0]));
-                Log.d("Item 3 e 4", "Fez o parsing");
-                Uri uri = PodcastProviderContract.EPISODE_LIST_URI;
-                for (ItemFeed item : itemList) {
-                    Log.d("Item 3 e 4", "Inserindo...");
-                    getContentResolver().insert(uri, item.toCV());
-                }
+                getContentResolver().delete(PodcastProviderContract.EPISODE_LIST_URI, null, null);
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.d("DownloadXmlTask", e.getMessage());
+                Cursor cursor = getContentResolver().query(PodcastProviderContract.EPISODE_LIST_URI,
+                        PodcastProviderContract.ALL_COLUMNS, null, null, null);
+                if (cursor != null) {
+                    for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                        itemList.add(new ItemFeed(cursor));
+                    }
+                    cursor.close();
+                }
             } catch (XmlPullParserException e) {
-                e.printStackTrace();
+                Log.e("DownloadXmlTask", e.getMessage());
             }
             return itemList;
         }
@@ -109,23 +113,38 @@ public class MainActivity extends Activity {
         protected void onPostExecute(List<ItemFeed> feed) {
             Toast.makeText(getApplicationContext(), "terminando...", Toast.LENGTH_SHORT).show();
 
+            new StoreDatabaseTask().execute(feed);
+
             //Adapter Personalizado
             XmlFeedAdapter adapter = new XmlFeedAdapter(getApplicationContext(), R.layout.itemlista, feed);
 
             //atualizar o list view
             items.setAdapter(adapter);
             items.setTextFilterEnabled(true);
-            /*
-            items.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    XmlFeedAdapter adapter = (XmlFeedAdapter) parent.getAdapter();
-                    ItemFeed item = adapter.getItem(position);
-                    String msg = item.getTitle() + " " + item.getLink();
-                    Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private class StoreDatabaseTask extends AsyncTask<List<ItemFeed>, Void, Boolean> {
+        @Override
+        protected void onPreExecute() {
+            Toast.makeText(getApplicationContext(), "armazenando...", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        protected Boolean doInBackground(List<ItemFeed>... feed) {
+            Log.d("Item 3 e 4", "Inserindo");
+            Uri uri = PodcastProviderContract.EPISODE_LIST_URI;
+            for (List<ItemFeed> list : feed) {
+                for (ItemFeed item : list) {
+                    getContentResolver().insert(uri, item.toCV());
                 }
-            });
-            /**/
+            }
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean boo) {
+            Toast.makeText(getApplicationContext(), "armazenado", Toast.LENGTH_SHORT).show();
         }
     }
 
