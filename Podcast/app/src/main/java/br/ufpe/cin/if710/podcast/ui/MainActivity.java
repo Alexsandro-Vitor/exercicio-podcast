@@ -94,6 +94,7 @@ public class MainActivity extends Activity {
                 itemList = XmlFeedParser.parse(getRssFeed(params[0]));
                 getContentResolver().delete(PodcastProviderContract.EPISODE_LIST_URI, null, null);
             } catch (IOException e) {
+                //Tarefa 6 concluída
                 Log.d("DownloadXmlTask", e.getMessage());
                 Cursor cursor = getContentResolver().query(PodcastProviderContract.EPISODE_LIST_URI,
                         PodcastProviderContract.ALL_COLUMNS, null, null, null);
@@ -132,10 +133,10 @@ public class MainActivity extends Activity {
 
         @Override
         protected Boolean doInBackground(List<ItemFeed>... feed) {
-            Log.d("Item 3 e 4", "Inserindo");
             Uri uri = PodcastProviderContract.EPISODE_LIST_URI;
             for (List<ItemFeed> list : feed) {
                 for (ItemFeed item : list) {
+                    //Tarefas 3 e 4 concluídas
                     getContentResolver().insert(uri, item.toCV());
                 }
             }
