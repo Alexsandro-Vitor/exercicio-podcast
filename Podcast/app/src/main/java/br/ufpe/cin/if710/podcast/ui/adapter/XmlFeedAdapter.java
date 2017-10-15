@@ -72,10 +72,12 @@ public class XmlFeedAdapter extends ArrayAdapter<ItemFeed> {
         addListener(getItem(position), holder.item_title);
         holder.item_date.setText(item.getPubDate());
         addDownload(position, holder.button);
+        //Se o podcast já foi baixado, ele já pode ser ouvido
+        if (!item.getUri().isEmpty()) holder.button.setText(R.string.action_listen);
         return convertView;
     }
 
-    //Tarefa 5 concluída
+    //Adiciona o listener para ir a tela de detalhes do podcast
     private void addListener(final ItemFeed item, TextView view) {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,6 +93,7 @@ public class XmlFeedAdapter extends ArrayAdapter<ItemFeed> {
         });
     }
 
+    //Adiciona um listener ao Button. Se o texto for "Baixar", ele baixa o podcast, se for "Escutar", ele toca
     private void addDownload(final int position, final Button button) {
         button.setOnClickListener(new Button.OnClickListener() {
             @Override
@@ -105,12 +108,6 @@ public class XmlFeedAdapter extends ArrayAdapter<ItemFeed> {
                     intent.putExtra("position", position);
                     getContext().startService(intent);
                 } else {
-                    Toast.makeText(getContext(), "Ainda não toca", Toast.LENGTH_SHORT).show();
-                    //ContentResolver resolver = getContext().getContentResolver();
-                    //String selection = PodcastProviderContract.DATE + " =?";
-                    //String[] selectionArgs = {item.getPubDate()};
-                    //Cursor cursor = resolver.query(PodcastProviderContract.EPISODE_LIST_URI, null, selection, selectionArgs, null);
-                    //String uri = cursor.getString(cursor.getColumnIndex(PodcastProviderContract.FILE_URI));
                     Intent intent = new Intent(getContext().getApplicationContext(), MediaService.class);
                     intent.setData(Uri.parse(item.getUri()));
                     getContext().startService(intent);

@@ -15,7 +15,7 @@ public class ItemFeed {
     private final String downloadLink;
     private final String uri;
 
-    public ItemFeed(String title, String link, String pubDate, String description, String downloadLink, String uri) {
+    protected ItemFeed(String title, String link, String pubDate, String description, String downloadLink, String uri) {
         this.title = title;
         this.link = link;
         this.pubDate = pubDate;
@@ -24,6 +24,7 @@ public class ItemFeed {
         this.uri = uri;
     }
 
+    //Construtor que usa um cursor retornado de uma query ao DB
     public ItemFeed(Cursor cursor) {
         title = getColValue(cursor, PodcastProviderContract.TITLE);
         link = getColValue(cursor, PodcastProviderContract.LINK);
@@ -33,6 +34,7 @@ public class ItemFeed {
         uri = getColValue(cursor, PodcastProviderContract.FILE_URI);
     }
 
+    //Metodo para refatoração
     private String getColValue(Cursor cursor, String col) {
         return cursor.getString(cursor.getColumnIndex(col));
     }
@@ -61,6 +63,7 @@ public class ItemFeed {
         return uri;
     }
 
+    //Gera um ConventValues para ser inserido no DB
     public ContentValues toCV() {
         ContentValues cv = new ContentValues();
         cv.put(PodcastProviderContract.TITLE, valid(title));
@@ -72,6 +75,7 @@ public class ItemFeed {
         return cv;
     }
 
+    //Evita problemas com valores null sendo inseridos no DB
     private String valid(String s) {
         return (s != null) ? s : "";
     }
