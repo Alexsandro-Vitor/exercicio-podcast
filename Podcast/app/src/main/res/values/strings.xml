@@ -13,4 +13,5 @@
     <string name="title_activity_settings">SettingsActivity</string>
 
     <string name="link_download">Link do Download: %1$s</string>
+    <string name="download_finished">Download terminou</string>
 </resources>

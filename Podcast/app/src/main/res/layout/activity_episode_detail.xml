@@ -27,6 +27,12 @@
         android:text="Link de Download não disponível" />
 
     <TextView
+        android:id="@+id/uri"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Vídeo não foi baixado" />
+
+    <TextView
         android:id="@+id/desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

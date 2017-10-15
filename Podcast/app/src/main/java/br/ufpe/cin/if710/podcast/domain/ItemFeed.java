@@ -13,14 +13,15 @@ public class ItemFeed {
     private final String pubDate;
     private final String description;
     private final String downloadLink;
+    private final String uri;
 
-
-    public ItemFeed(String title, String link, String pubDate, String description, String downloadLink) {
+    public ItemFeed(String title, String link, String pubDate, String description, String downloadLink, String uri) {
         this.title = title;
         this.link = link;
         this.pubDate = pubDate;
         this.description = description;
         this.downloadLink = downloadLink;
+        this.uri = uri;
     }
 
     public ItemFeed(Cursor cursor) {
@@ -29,6 +30,7 @@ public class ItemFeed {
         pubDate = getColValue(cursor, PodcastProviderContract.DATE);
         description = getColValue(cursor, PodcastProviderContract.DESC);
         downloadLink = getColValue(cursor, PodcastProviderContract.DOWNLOAD_LINK);
+        uri = getColValue(cursor, PodcastProviderContract.FILE_URI);
     }
 
     private String getColValue(Cursor cursor, String col) {
@@ -53,6 +55,10 @@ public class ItemFeed {
 
     public String getDownloadLink() {
         return downloadLink;
+    }
+
+    public String getUri() {
+        return uri;
     }
 
     public ContentValues toCV() {

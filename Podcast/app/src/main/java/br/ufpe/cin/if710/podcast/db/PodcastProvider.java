@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.util.Log;
 
 public class PodcastProvider extends ContentProvider {
 
@@ -36,6 +37,7 @@ public class PodcastProvider extends ContentProvider {
         if (isEpisodeUri(uri)) {
             SQLiteDatabase data = db.getWritableDatabase();
             long id = data.insert(PodcastDBHelper.DATABASE_TABLE, null, values);
+            Log.d("PodcastProvider", "Inseriu "+id);
             return Uri.withAppendedPath(PodcastProviderContract.EPISODE_LIST_URI, Long.toString(id));
         } return null;
     }

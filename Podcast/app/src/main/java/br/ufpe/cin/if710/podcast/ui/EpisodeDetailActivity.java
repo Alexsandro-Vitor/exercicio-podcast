@@ -21,5 +21,6 @@ public class EpisodeDetailActivity extends Activity {
         ((TextView) findViewById(R.id.desc)).setText(extras.getString(PodcastProviderContract.DESC));
         TextView downloadView = findViewById(R.id.download);
         downloadView.setText(String.format(getString(R.string.link_download), extras.getString(PodcastProviderContract.DOWNLOAD_LINK)));
+        ((TextView) findViewById(R.id.uri)).setText(extras.getString(PodcastProviderContract.FILE_URI));
     }
 }

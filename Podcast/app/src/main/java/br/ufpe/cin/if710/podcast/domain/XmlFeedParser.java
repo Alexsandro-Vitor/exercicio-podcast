@@ -69,7 +69,6 @@ public class XmlFeedParser {
                 continue;
             }
             String name = parser.getName();
-            Log.d("Teste", "Entrou no if");
             if (name.equals("title")) {
                 title = readData(parser, "title");
             } else if (name.equals("link")) {
@@ -85,7 +84,7 @@ public class XmlFeedParser {
                 skip(parser);
             }
         }
-        ItemFeed result = new ItemFeed(title, link, pubDate, description, downloadLink);
+        ItemFeed result = new ItemFeed(title, link, pubDate, description, downloadLink, "");
         return result;
     }
 
