@@ -43,15 +43,15 @@ episódio, atualizações em segundo plano, notificações de novos episódios, 
 
 | Passo | Completou? |
 | ------ | ------ |
-| 1 | **Sim** |
-| 2 | **Sim** |
-| 3 | **Sim** |
-| 4 | **Sim** |
-| 5 | **Sim** |
-| 6 | **Sim** |
-| 7 | **não** |
-| 8 | **não** |
-| 9 | **não** |
+| 01 | **Sim** |
+| 02 | **Sim** |
+| 03 | **Sim** |
+| 04 | **Sim** |
+| 05 | **Sim** |
+| 06 | **Sim** |
+| 07 | **Sim** |
+| 08 | **Sim** |
+| 09 | **Sim** |
 | 10 | **não** |
 | 11 | **não** |
 | 12 | **não** |
