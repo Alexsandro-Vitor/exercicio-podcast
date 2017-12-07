@@ -39,6 +39,7 @@ import br.ufpe.cin.if710.podcast.db.PodcastProvider;
 import br.ufpe.cin.if710.podcast.db.PodcastProviderContract;
 import br.ufpe.cin.if710.podcast.domain.ItemFeed;
 import br.ufpe.cin.if710.podcast.domain.XmlFeedParser;
+import br.ufpe.cin.if710.podcast.notifications.DownloadCompleteNotification;
 import br.ufpe.cin.if710.podcast.services.DownloadService;
 import br.ufpe.cin.if710.podcast.ui.adapter.XmlFeedAdapter;
 
@@ -52,9 +53,12 @@ public class MainActivity extends Activity {
 
     private XmlFeedAdapter adapter;
 
+    DownloadCompleteNotification dcReceiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        dcReceiver = new DownloadCompleteNotification();
         setContentView(R.layout.activity_main);
 
         items = findViewById(R.id.items);

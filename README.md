@@ -17,7 +17,7 @@ episódio, atualizações em segundo plano, notificações de novos episódios, 
 01. Inicialmente, teste a aplicação e certifique-se de que está tudo funcionando. Fique à vontade para melhorar o visual. :)
 02. Ajuste o parser de XML (`XmlFeedParser`) para obter o link de download do arquivo XML em questão. Já há um método criado `readEnclosure`, basta obter o valor do atributo correspondente e retornar;
 03. Faça com que a aplicação passe a usar um banco de dados SQLite (`PodcastDBHelper`) como forma de persistir os dados. Isto é, após o download e parsing do RSS, a lista de episódios deve ser armazenada no banco;
-04. A manipulação do banco de dados deve ser feita por meio do `XmlFeedProvider`, já criado no respectivo pacote, sem implementação de nenhum método;
+04. A manipulação do banco de dados deve ser feita por meio do `PodcastProvider`, já criado no respectivo pacote, sem implementação de nenhum método;
 05. Altere a aplicação de forma que, ao clicar em um título, o usuário seja direcionado para `EpisodeDetailActivity`, onde devem ser exibidos os detalhes do episódio em questão;
 06. Altere a fonte de dados do ListView para usar o banco de dados ao invés do resultado do AsyncTask. Ou seja, mesmo que esteja sem conectividade, deve ser possível ao menos listar todos os itens obtidos na última vez que o app rodou. Reforçando que o acesso aos dados deve ser feito por meio do content provider;
 07. Altere o comportamento da aplicação de forma que ao clicar em download, o episódio seja baixado, e a URI de localização do arquivo seja armazenada no banco; 
@@ -52,7 +52,7 @@ episódio, atualizações em segundo plano, notificações de novos episódios, 
 | 07 | **Sim** |
 | 08 | **Sim** |
 | 09 | **Sim** |
-| 10 | **não** |
+| 10 | **Sim** |
 | 11 | **não** |
 | 12 | **não** |
 | 13 | **não** |
