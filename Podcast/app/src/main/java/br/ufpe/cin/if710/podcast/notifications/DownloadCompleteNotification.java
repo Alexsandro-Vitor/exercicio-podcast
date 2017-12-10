@@ -1,7 +1,5 @@
 package br.ufpe.cin.if710.podcast.notifications;
 
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -20,7 +18,8 @@ public class DownloadCompleteNotification extends BroadcastReceiver {
         if (intent.getAction().equals(DOWNLOAD_COMPLETE)) {
             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
                     .setContentTitle("Podcast")
-                    .setContentText("O download de " + intent.getStringExtra("uri") + " terminou");
+                    .setContentText("O download de " + intent.getStringExtra("uri") + " terminou")
+                    .setSmallIcon(android.R.drawable.arrow_down_float);
             NotificationManagerCompat mNotifyManager = NotificationManagerCompat.from(context);
             mNotifyManager.notify(1, mBuilder.build());
         }

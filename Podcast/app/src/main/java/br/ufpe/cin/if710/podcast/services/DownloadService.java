@@ -35,15 +35,21 @@ public class DownloadService extends IntentService {
     public void onCreate() {
         super.onCreate();
         receiver = new DownloadCompleteNotification();
-        IntentFilter filter = new IntentFilter();
+        /*IntentFilter filter = new IntentFilter();
         filter.addAction(DOWNLOAD_COMPLETE);
-        this.registerReceiver(receiver, filter);
+        this.registerReceiver(receiver, filter);*/
+
+        Log.d("DownloadService", "Broadcast registrado");
+        IntentFilter filter = new IntentFilter(DownloadService.DOWNLOAD_COMPLETE);
+        LocalBroadcastManager.getInstance(getApplicationContext()).registerReceiver(receiver, filter);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        this.unregisterReceiver(receiver);
+        //this.unregisterReceiver(receiver);
+        Log.d("DownloadService", "O Broadcast já fez seu trabalho");
+        LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(receiver);
     }
 
     @Override
