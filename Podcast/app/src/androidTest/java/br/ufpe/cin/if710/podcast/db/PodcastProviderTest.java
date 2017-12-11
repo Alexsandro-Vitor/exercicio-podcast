@@ -73,7 +73,7 @@ public class PodcastProviderTest {
         String[] selectionArgs = {(String) cv.get(PodcastProviderContract.TITLE)};
         cv.put(PodcastProviderContract.DESC, "Descricao 2");
         assertEquals(1, provider.update(PodcastProviderContract.EPISODE_LIST_URI, cv,
-                PodcastProviderContract.TITLE + " =?", selectionArgs));
+                PodcastProviderContract.TITLE + " = ?", selectionArgs));
     }
 
 }
