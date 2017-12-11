@@ -1,7 +1,6 @@
 package br.ufpe.cin.if710.podcast.db;
 
 import android.content.Context;
-import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -18,9 +17,7 @@ public class PodcastDBHelper extends SQLiteOpenHelper {
     private static PodcastDBHelper db;
 
     public static PodcastDBHelper getInstance(Context c) {
-        if (db==null) {
-            db = new PodcastDBHelper(c.getApplicationContext());
-        }
+        if (db == null) db = new PodcastDBHelper(c.getApplicationContext());
         return db;
     }
 

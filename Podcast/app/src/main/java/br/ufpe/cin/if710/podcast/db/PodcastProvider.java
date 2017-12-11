@@ -45,7 +45,7 @@ public class PodcastProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         db = PodcastDBHelper.getInstance(getContext());
-        return true;
+        return db != null;
     }
 
     @Override
@@ -57,8 +57,7 @@ public class PodcastProvider extends ContentProvider {
     }
 
     @Override
-    public int update(Uri uri, ContentValues values, String selection,
-                      String[] selectionArgs) {
+    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         if (isEpisodeUri(uri)) {
             return db.getWritableDatabase().update(PodcastDBHelper.DATABASE_TABLE, values, selection, selectionArgs);
         } return 0;
