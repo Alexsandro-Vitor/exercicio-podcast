@@ -34,7 +34,6 @@ import br.ufpe.cin.if710.podcast.R;
 import br.ufpe.cin.if710.podcast.db.PodcastProviderContract;
 import br.ufpe.cin.if710.podcast.domain.ItemFeed;
 import br.ufpe.cin.if710.podcast.domain.XmlFeedParser;
-import br.ufpe.cin.if710.podcast.notifications.DownloadCompleteNotification;
 import br.ufpe.cin.if710.podcast.services.DownloadService;
 import br.ufpe.cin.if710.podcast.ui.adapter.XmlFeedAdapter;
 

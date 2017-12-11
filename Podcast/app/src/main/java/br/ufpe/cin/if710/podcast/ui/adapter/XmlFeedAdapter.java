@@ -1,13 +1,9 @@
 package br.ufpe.cin.if710.podcast.ui.adapter;
 
-import java.io.IOException;
 import java.util.List;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.util.Log;
 import android.view.View;
@@ -60,9 +56,9 @@ public class XmlFeedAdapter extends ArrayAdapter<ItemFeed> {
         if (convertView == null) {
             convertView = View.inflate(getContext(), linkResource, null);
             holder = new ViewHolder();
-            holder.item_title = (TextView) convertView.findViewById(R.id.item_title);
-            holder.item_date = (TextView) convertView.findViewById(R.id.item_date);
-            holder.button = (Button) convertView.findViewById(R.id.item_action);
+            holder.item_title = convertView.findViewById(R.id.item_title);
+            holder.item_date = convertView.findViewById(R.id.item_date);
+            holder.button = convertView.findViewById(R.id.item_action);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();

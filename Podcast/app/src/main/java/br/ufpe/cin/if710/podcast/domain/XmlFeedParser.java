@@ -1,7 +1,5 @@
 package br.ufpe.cin.if710.podcast.domain;
 
-import android.util.Log;
-
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;

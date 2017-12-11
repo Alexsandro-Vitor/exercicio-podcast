@@ -1,7 +1,6 @@
 package br.ufpe.cin.if710.podcast.ui;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 

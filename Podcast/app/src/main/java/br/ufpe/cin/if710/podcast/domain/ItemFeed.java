@@ -2,9 +2,7 @@ package br.ufpe.cin.if710.podcast.domain;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.os.Bundle;
 
-import br.ufpe.cin.if710.podcast.db.PodcastDBHelper;
 import br.ufpe.cin.if710.podcast.db.PodcastProviderContract;
 
 public class ItemFeed {

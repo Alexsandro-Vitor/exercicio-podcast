@@ -6,7 +6,7 @@ Foram feitos testes das seguintes classes:
 
 Esta classe teve 5 de seus 6 métodos públicos testados (getType não foi testado por não ser usado na aplicação). Originalmente era pra ser um teste de unidade, porém o método onCreate() chama o método getContext() em sua execução, que só pode ser utilizado em testes instrumentados.
 
-* Preparo dos testes: O teste de cada função é feito em um DB contendo apenas um item, sendo limpo e tendo a mesma entrada incluída após cada teste
+* __Preparo dos testes__: O teste de cada função é feito em um DB contendo apenas um item, sendo limpo e tendo a mesma entrada incluída após cada teste
 
 ```java
 @Before
@@ -28,7 +28,7 @@ public void tearDown() throws Exception {
 }
 ```
 
-* delete(): Tenta remover um objeto que contenha o mesmo título do único objeto do DB, funciona se conseguir remover 1 objeto.
+* __delete()__: Tenta remover um objeto que contenha o mesmo título do único objeto do DB, funciona se conseguir remover 1 objeto.
 
 ```java
 @Test
@@ -40,7 +40,7 @@ public void delete() throws Exception {
 }
 ```
 
-* insert(): Insere um novo objeto no DB. Funciona se retornar uma Uri.
+* __insert()__: Insere um novo objeto no DB. Funciona se retornar uma Uri.
 
 ```java
 @Test
@@ -56,7 +56,7 @@ public void insert() throws Exception {
 }
 ```
 
-* onCreate(): Executa o método onCreate() de PodcastProvider. Se e somente se o provider tiver obtido uma instância do PodcastDBHelper, retorna true. Funciona se provider tiver obtido esta instância.
+* __onCreate()__: Executa o método onCreate() de PodcastProvider. Se e somente se o provider tiver obtido uma instância do PodcastDBHelper, retorna true. Funciona se provider tiver obtido esta instância.
 
 ```java
 //Teste
@@ -75,7 +75,7 @@ public boolean onCreate() {
 }
 ```
 
-* query(): Tenta buscar um objeto que está no DB por seu título, funciona se conseguir obter um.
+* __query()__: Tenta buscar um objeto que está no DB por seu título, funciona se conseguir obter um.
 
 ```java
 @Test
@@ -88,7 +88,7 @@ public void query() throws Exception {
 }
 ```
 
-* update(): Tenta alterar a descrição de um objeto no DB, funciona se conseguir alterar um objeto.
+* __update()__: Tenta alterar a descrição de um objeto no DB, funciona se conseguir alterar um objeto.
 
 ```java
 @Test
