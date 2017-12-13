@@ -11,11 +11,34 @@ Todos os testes, com exceção da abertura do aplicativo, foram feitos partindo 
 
 * __Scroll na tela inicial:__ Após ir até o fim da lista de podcasts e voltar algumas vezes, o uso de memória subiu para 20%. Em outro teste, mantendo o dedo na tela e deslizando várias vezes o uso de memória subiu para 14%.
 
-* __Download de podcast:__ Ao iniciar o download do podcast "O Homem foi mesmo até a Lua?", o uso de CPU se manteve quase sempre entre 2 e 5%, não chegando a 7%.
+* __Download de podcast:__ Ao iniciar o download de um podcast, o uso de CPU se manteve quase sempre entre 2 e 5%, não chegando a 7%.
 
 * __Segundo plano:__ Ao deixar o aplicativo em segundo plano, o uso de CPU não mudou. Retornando para o app, o consumo de CPU subiu para 
 cerca de 40%.
 
-* __Execução de podcast:__ Ao iniciar a execução do podcast "O Homem foi mesmo até a Lua?", o consumo de CPU é de 14%.
+* __Execução de podcast:__ Ao iniciar a execução de um podcast, o consumo de CPU tem um curto pico de 14%.
 
 Em todos os casos o consumo de CPU baixa para 0% depois de um tempo.
+
+### Modificação 1: RecyclerView ###
+
+A ListView utilizada no app foi substituída por uma RecyclerView com a intenção de reduzir a quantidade de memória liberada pelo garbage collector. Em seguida, os testes acima foram refeitos para comparação.
+
+A implemntação consistiu em trocar a classe do ListView de MainActivity para RecyclerView e substituir o XmlFeedAdapter pela implementação em RecyclerXmlFeedAdapter.
+
+* __Abertura do aplicativo:__ Ao abrir o aplicativo a CPU atingiu um pico de 36%.
+
+* __Abertura e fechamento da EpisodeDetailActivity:__ Após abrir e fechar várias vezes a tela de detalhe do podcast, o uso da CPU chegou a picos de 46%.
+
+* __Scroll na tela inicial:__ Indo até o final da lista e voltando, o uso de CPU chegou a 25%. Esse uso de CPU foi menor na volta ficando entre 10 e 20%.
+
+* __Download de podcast:__ Ao iniciar o download de um podcast, houve um pico de 11%, depois o uso de CPU ficou quase sempre abaixo de 2%.
+
+* __Segundo plano:__ Ao deixar o aplicativo em segundo plano, o uso de CPU não mudou. Retornando para o app, o consumo de CPU subiu para 
+cerca de 40%.
+
+* __Execução de podcast:__ Ao iniciar a execução de um podcast, o consumo de CPU tem um curto pico de 11%.
+
+Em todos os casos o consumo de CPU baixa para 0% depois de um tempo.
+
+Comparando a versão modificada com a original, pode-se perceber que o RecyclerView não necessariamente economiza processamento, com todas as operações o envolvendo tendo o uso de CPU aumentado.
