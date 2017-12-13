@@ -19,7 +19,7 @@ Todos os testes, com exceção da abertura do aplicativo, foram feitos partindo 
 
 A ListView utilizada no app foi substituída por uma RecyclerView com a intenção de reduzir o uso de memória reaproveitando views não visualizadas ao invés de manter centenas delas. Em seguida, os testes acima foram refeitos para comparação.
 
-A implemntação consistiu em trocar a classe do ListView de MainActivity para RecyclerView e substituir o XmlFeedAdapter pela implementação em RecyclerXmlFeedAdapter.
+A implementação consistiu em trocar a classe do ListView de MainActivity para RecyclerView e substituir o XmlFeedAdapter pela implementação em RecyclerXmlFeedAdapter.
 
 * __Abertura do aplicativo:__ O aplicativo quando aberto inicialmente se mantem com um consumo de memória entre 12 e 15 MB (houveram varições em múltiplos testes).
 
@@ -34,3 +34,21 @@ A implemntação consistiu em trocar a classe do ListView de MainActivity para R
 * __Segundo plano:__ Ao deixar o aplicativo em segundo plano, o uso de memória desceu para 11,5 MB.
 
 Os experimentos acima levaram à suspeita de 2 memory leaks, um nos downloads, e outro ao abrir a MainActivity.
+
+### Modificação 2: Singleton + Checagem de atualização ###
+
+Foi feito um singleton do RecyclerXmlFeedAdapter com o objetivo de evitar múltiplas criações do mesmo, devido a seu tamanho considerável. Porém, também era preciso reduzir o número de criações da lista de objetos do adapter, já que ela era uma grande parte do mesmo. Isso foi feito checando quando foi a última atualização do XML e só criando um novo ListView quando o antigo estiver desatualizado.
+
+* __Abertura do aplicativo:__ O aplicativo quando aberto teve um consumo de memória de 11,5 MB
+
+* __Abertura e fechamento da EpisodeDetailActivity:__ Abrindo e fechando várias vezes a tela de detalhe do podcast, o consumo de memória subiu a cada abertura da MainActivity, chegando a 18 MB, porém depois de um tempo regrediu para 17 MB.
+
+* __Scroll na tela inicial:__ Indo até o fim da lista e voltando algumas vezes, o consumo de memória ficou em 12,5 MB. Mantendo o dedo na tela e deslizando várias vezes o uso de memória atingiu um pico de 12,5 MB.
+
+* __Execução do Garbage Collector:__ O efeito do garbage collector foi mínimo, como consumo de memória ainda próximo de 11,5 MB.
+
+* __Download de podcast:__ O mesmo comportamento do teste anterior, durante o download de um podcast, o uso de memória subiu progressivamente até 15 MB, quando o garbage collector foi acionado, reduzindo a 13 MB. Isso ocorreu algumas durante o download.
+
+* __Segundo plano:__ Ao deixar o aplicativo em segundo plano, o uso de memória desceu para 11,1 MB.
+
+O memory leak do download ainda não foi resolvido, mas já pôde ser observado um efeito na MainActivity.
