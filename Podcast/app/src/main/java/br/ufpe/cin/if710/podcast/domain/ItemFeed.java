@@ -12,6 +12,11 @@ public class ItemFeed {
     private final String description;
     private final String downloadLink;
     private final String uri;
+    private byte estado;
+
+    public static final byte NAO_BAIXOU = 0;
+    public static final byte BAIXANDO = 1;
+    public static final byte BAIXOU = 2;
 
     protected ItemFeed(String title, String link, String pubDate, String description, String downloadLink, String uri) {
         this.title = title;
@@ -20,6 +25,7 @@ public class ItemFeed {
         this.description = description;
         this.downloadLink = downloadLink;
         this.uri = uri;
+        this.estado = (uri.isEmpty()) ? NAO_BAIXOU : BAIXOU;
     }
 
     //Construtor que usa um cursor retornado de uma query ao DB
@@ -30,6 +36,7 @@ public class ItemFeed {
         description = getColValue(cursor, PodcastProviderContract.DESC);
         downloadLink = getColValue(cursor, PodcastProviderContract.DOWNLOAD_LINK);
         uri = getColValue(cursor, PodcastProviderContract.FILE_URI);
+        this.estado = (uri.isEmpty()) ? NAO_BAIXOU : BAIXOU;
     }
 
     //Metodo para refatoração
@@ -59,6 +66,14 @@ public class ItemFeed {
 
     public String getUri() {
         return uri;
+    }
+
+    public byte getEstado() {
+        return estado;
+    }
+
+    public void setEstado(byte estado) {
+        this.estado = estado;
     }
 
     //Gera um ConventValues para ser inserido no DB

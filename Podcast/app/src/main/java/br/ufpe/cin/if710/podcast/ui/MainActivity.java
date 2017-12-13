@@ -13,11 +13,14 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -35,6 +38,7 @@ import br.ufpe.cin.if710.podcast.db.PodcastProviderContract;
 import br.ufpe.cin.if710.podcast.domain.ItemFeed;
 import br.ufpe.cin.if710.podcast.domain.XmlFeedParser;
 import br.ufpe.cin.if710.podcast.services.DownloadService;
+import br.ufpe.cin.if710.podcast.ui.adapter.RecyclerXmlFeedAdapter;
 import br.ufpe.cin.if710.podcast.ui.adapter.XmlFeedAdapter;
 
 public class MainActivity extends Activity {
@@ -43,9 +47,11 @@ public class MainActivity extends Activity {
     private final String RSS_FEED = "http://leopoldomt.com/if710/fronteirasdaciencia.xml";
     //TODO teste com outros links de podcast
 
-    private ListView items;
+    //private ListView items;
+    private RecyclerView items;
 
-    private XmlFeedAdapter adapter;
+    //private XmlFeedAdapter adapter;
+    private RecyclerXmlFeedAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +59,9 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         items = findViewById(R.id.items);
+        items.setHasFixedSize(true);
+        items.setLayoutManager(new LinearLayoutManager(this));
+
     }
 
     @Override
@@ -93,8 +102,8 @@ public class MainActivity extends Activity {
     @Override
     protected void onStop() {
         super.onStop();
-        XmlFeedAdapter adapter = (XmlFeedAdapter) items.getAdapter();
-        adapter.clear();
+        //XmlFeedAdapter adapter = (XmlFeedAdapter) items.getAdapter();
+        //adapter.clear();
     }
 
     //Baixa o Xml e insere informações no DB
@@ -171,11 +180,12 @@ public class MainActivity extends Activity {
         protected void onPostExecute(List<ItemFeed> feed) {
             Toast.makeText(getApplicationContext(), "Montando as views", Toast.LENGTH_SHORT).show();
             //Adapter Personalizado
-            adapter = new XmlFeedAdapter(getApplicationContext(), R.layout.itemlista, feed);
+            //adapter = new XmlFeedAdapter(getApplicationContext(), R.layout.itemlista, feed);
+            adapter = new RecyclerXmlFeedAdapter(getApplicationContext(), R.layout.itemlista, feed);
 
             //atualizar o list view
             items.setAdapter(adapter);
-            items.setTextFilterEnabled(true);
+            //items.setTextFilterEnabled(true);
 
             Toast.makeText(getApplicationContext(), "Views montadas: " + feed.size(), Toast.LENGTH_SHORT).show();
         }
@@ -221,19 +231,22 @@ public class MainActivity extends Activity {
         @Override
         public void onReceive(Context context, Intent intent) {
             int position = intent.getIntExtra("position", 0);
-            Button button = items.getChildAt(position).findViewById(R.id.item_action);
+            RecyclerXmlFeedAdapter.ViewHolder holder = (RecyclerXmlFeedAdapter.ViewHolder)items.findViewHolderForAdapterPosition(position);
+            Button button = holder.button;
 
-            ItemFeed itemFeed = (ItemFeed)items.getItemAtPosition(position);
+            String pubDate = (String)holder.item_date.getText();
             ContentResolver resolver = getContentResolver();
             ContentValues cv = new ContentValues();
-            cv.put(PodcastProviderContract.FILE_URI, intent.getStringExtra("uri"));
+            String uri = intent.getStringExtra("uri");
+            cv.put(PodcastProviderContract.FILE_URI, uri);
 
             String selection = PodcastProviderContract.DATE + " =?";
-            String[] selectionArgs = {itemFeed.getPubDate()};
+            String[] selectionArgs = {pubDate};
             int s = resolver.update(PodcastProviderContract.EPISODE_LIST_URI, cv, selection, selectionArgs);
-            adapter.notifyDataSetChanged();
-            button.setEnabled(true);
-            button.setText(R.string.action_listen);
+            adapter.baixou(position);    //Atualizando informação no adapter
+            //button.setEnabled(true);
+            //button.setText(R.string.action_listen);
+            adapter.notifyItemChanged(position);
         }
     };
 }
