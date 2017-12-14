@@ -111,7 +111,8 @@ Esta classe teve 9 métodos testados, a maioria são getters e setters, então a
 public void setUp() throws Exception {
     itemFeed = new ItemFeed(titulo, link, pubDate, description, downloadLink, uri);
     itemFeed2 = new ItemFeed(null, null, null, null, null, null);
-}```
+}
+```
 
 * __getEstado()__: O estado do informa se o podcast daquele ItemFeed ainda não foi baixado, está sendo baixado ou foi baixado. Quando o ItemFeed é criado, se ele possuir um valor em _uri_, o estado inicial dele é ItemFeed.NAO_BAIXOU, caso ele possua algum valor em uri, é ItemFeed.BAIXOU.
 
@@ -120,7 +121,8 @@ public void setUp() throws Exception {
 public void getEstado() throws Exception {
     assertEquals(ItemFeed.BAIXOU, itemFeed.getEstado());
     assertEquals(ItemFeed.NAO_BAIXOU, itemFeed2.getEstado());
-}```
+}
+```
 
 * __getEstado()__: O estado não é final como os outros valores do ItemFeed porque ele é atualizado ao iniciar e terminar o download dos podcasts, logo ele precisa de um setter testado.
 
@@ -129,7 +131,8 @@ public void getEstado() throws Exception {
 public void setEstado() throws Exception {
     itemFeed.setEstado(ItemFeed.BAIXANDO);
     assertEquals(ItemFeed.BAIXANDO, itemFeed.getEstado());
-}```
+}
+```
 
 * __toCV()__: O método que converte o ItemFeed em um ContentValues é usado na inserção da lista de podcasts no banco de dados. Os valores inseridos no DB não podem ser null, então é preciso garantir que eles não sejam.
 
@@ -143,4 +146,5 @@ public void toCV() throws Exception {
     assertNotNull(cv.get(PodcastProviderContract.DESC));
     assertNotNull(cv.get(PodcastProviderContract.DOWNLOAD_LINK));
     assertNotNull(cv.get(PodcastProviderContract.FILE_URI));
-}```
+}
+```
