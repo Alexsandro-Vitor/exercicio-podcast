@@ -22,7 +22,6 @@ public class ItemFeedTest {
     private final String downloadLink = "DownloadLink 1";
     private final String uri = "Uri 1";
 
-
     @Before
     public void setUp() throws Exception {
         itemFeed = new ItemFeed(titulo, link, pubDate, description, downloadLink, uri);
