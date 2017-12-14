@@ -124,7 +124,7 @@ public void getEstado() throws Exception {
 }
 ```
 
-* __getEstado()__: O estado não é final como os outros valores do ItemFeed porque ele é atualizado ao iniciar e terminar o download dos podcasts, logo ele precisa de um setter testado.
+* __setEstado()__: O estado não é final como os outros valores do ItemFeed porque ele é atualizado pelo adapter ao iniciar e terminar o download dos podcasts, logo ele precisa de um setter testado.
 
 ```java
 @Test
