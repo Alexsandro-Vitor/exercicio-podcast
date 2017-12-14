@@ -19,8 +19,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -39,7 +37,6 @@ import br.ufpe.cin.if710.podcast.domain.ItemFeed;
 import br.ufpe.cin.if710.podcast.domain.XmlFeedParser;
 import br.ufpe.cin.if710.podcast.services.DownloadService;
 import br.ufpe.cin.if710.podcast.ui.adapter.RecyclerXmlFeedAdapter;
-import br.ufpe.cin.if710.podcast.ui.adapter.XmlFeedAdapter;
 
 public class MainActivity extends Activity {
 
@@ -108,16 +105,12 @@ public class MainActivity extends Activity {
 
     //Baixa o Xml e insere informações no DB
     private class DownloadXmlTask extends AsyncTask<String, Void, List<ItemFeed>> {
-        @Override
-        protected void onPreExecute() {
-            Toast.makeText(getApplicationContext(), "iniciando...", Toast.LENGTH_SHORT).show();
-        }
 
         @Override
         protected List<ItemFeed> doInBackground(String... params) {
             List<ItemFeed> itemList = new ArrayList<>();
             try {
-                itemList = XmlFeedParser.parse(getRssFeed(params[0]));
+                if (mudou(params[0])) itemList = XmlFeedParser.parse(getRssFeed(params[0]));
                 //getContentResolver().delete(PodcastProviderContract.EPISODE_LIST_URI, null, null);
             } catch (IOException e) {
                 Log.e("DownloadXmlTask", e.getMessage());
@@ -129,8 +122,6 @@ public class MainActivity extends Activity {
 
         @Override
         protected void onPostExecute(List<ItemFeed> feed) {
-            Toast.makeText(getApplicationContext(), "terminando...", Toast.LENGTH_SHORT).show();
-
             /*if (trocouLink) {
                 getContentResolver().delete(PodcastProviderContract.EPISODE_LIST_URI, null, null);
                 trocouLink = true;
@@ -178,10 +169,10 @@ public class MainActivity extends Activity {
 
         @Override
         protected void onPostExecute(List<ItemFeed> feed) {
-            Toast.makeText(getApplicationContext(), "Montando as views", Toast.LENGTH_SHORT).show();
             //Adapter Personalizado
             //adapter = new XmlFeedAdapter(getApplicationContext(), R.layout.itemlista, feed);
-            adapter = new RecyclerXmlFeedAdapter(getApplicationContext(), R.layout.itemlista, feed);
+            adapter = RecyclerXmlFeedAdapter.getInstance(getApplicationContext(), feed);
+            //new RecyclerXmlFeedAdapter(getApplicationContext(), feed);
 
             //atualizar o list view
             items.setAdapter(adapter);
@@ -249,4 +240,19 @@ public class MainActivity extends Activity {
             adapter.notifyItemChanged(position);
         }
     };
+
+    private boolean mudou(String feed) throws IOException {
+        if (adapter == null) return true;
+        else {
+            URL url = new URL(feed);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestProperty("If-Modified-Since", adapter.ultimoUpdate);
+            if (conn.getResponseCode() == 304) return false;
+            else {
+                RecyclerXmlFeedAdapter.getInstance(getApplicationContext(), null)
+                        .ultimoUpdate = conn.getHeaderField("Last-Modified");
+                return true;
+            }
+        }
+    }
 }

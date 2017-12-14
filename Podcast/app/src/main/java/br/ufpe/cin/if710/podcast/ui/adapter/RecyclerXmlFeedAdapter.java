@@ -24,9 +24,9 @@ import br.ufpe.cin.if710.podcast.ui.EpisodeDetailActivity;
 
 public class RecyclerXmlFeedAdapter extends RecyclerView.Adapter<RecyclerXmlFeedAdapter.ViewHolder> {
 
-    private int linkResource;
     private Context context;
     private List<ItemFeed> lista;
+    public String ultimoUpdate;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView item_title;
@@ -42,10 +42,20 @@ public class RecyclerXmlFeedAdapter extends RecyclerView.Adapter<RecyclerXmlFeed
         }
     }
 
-    public RecyclerXmlFeedAdapter(Context context, int resource, List<ItemFeed> objects) {
+    private static RecyclerXmlFeedAdapter instance;
+
+    private RecyclerXmlFeedAdapter(Context context, List<ItemFeed> objects) {
         this.context = context;
-        linkResource = resource;
         lista = objects;
+    }
+
+    public static RecyclerXmlFeedAdapter getInstance(Context context, List<ItemFeed> objects) {
+        if (instance == null) instance = new RecyclerXmlFeedAdapter(context, objects);
+        else {
+            instance.context = context;
+            instance.lista = objects;
+        }
+        return instance;
     }
 
     @Override
@@ -88,49 +98,6 @@ public class RecyclerXmlFeedAdapter extends RecyclerView.Adapter<RecyclerXmlFeed
     public void baixou(int position) {
         lista.get(position).setEstado(ItemFeed.BAIXOU);
     }
-
-    /**
-     * public abstract View getView (int position, View convertView, ViewGroup parent)
-     * <p>
-     * Added in API level 1
-     * Get a View that displays the data at the specified position in the data set. You can either create a View manually or inflate it from an XML layout file. When the View is inflated, the parent View (GridView, ListView...) will apply default layout parameters unless you use inflate(int, android.view.ViewGroup, boolean) to specify a root view and to prevent attachment to the root.
-     * <p>
-     * Parameters
-     * position	The position of the item within the adapter's data set of the item whose view we want.
-     * convertView	The old view to reuse, if possible. Note: You should check that this view is non-null and of an appropriate type before using. If it is not possible to convert this view to display the correct data, this method can create a new view. Heterogeneous lists can specify their number of view types, so that this View is always of the right type (see getViewTypeCount() and getItemViewType(int)).
-     * parent	The parent that this view will eventually be attached to
-     * Returns
-     * A View corresponding to the data at the specified position.
-     */
-
-
-    /*static class ViewHolder {
-        TextView item_title;
-        TextView item_date;
-        Button button;
-    }*/
-
-    /*public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
-        if (convertView == null) {
-            convertView = View.inflate(getContext(), linkResource, null);
-            holder = new ViewHolder();
-            holder.item_title = convertView.findViewById(R.id.item_title);
-            holder.item_date = convertView.findViewById(R.id.item_date);
-            holder.button = convertView.findViewById(R.id.item_action);
-            convertView.setTag(holder);
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
-        ItemFeed item = getItem(position);
-        holder.item_title.setText(item.getTitle());
-        addListener(getItem(position), holder.item_title);
-        holder.item_date.setText(item.getPubDate());
-        addDownload(position, holder.button);
-        //Se o podcast já foi baixado, ele já pode ser ouvido
-        if (!item.getUri().isEmpty()) holder.button.setText(R.string.action_listen);
-        return convertView;
-    }*/
 
     //Adiciona o listener para ir a tela de detalhes do podcast
     private void addListener(final ItemFeed item, TextView view) {
