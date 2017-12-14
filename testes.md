@@ -4,9 +4,9 @@ Foram feitos testes das seguintes classes:
 
 ### PodcastProvider
 
-Esta classe teve 5 de seus 6 mÈtodos p˙blicos testados (getType n„o foi testado por n„o ser usado na aplicaÁ„o). Originalmente era pra ser um teste de unidade, porÈm o mÈtodo onCreate() chama o mÈtodo getContext() em sua execuÁ„o, que sÛ pode ser utilizado em testes instrumentados.
+Esta classe teve 5 de seus 6 m√©todos p√∫blicos testados (getType n√£o foi testado por n√£o ser usado na aplica√ß√£o). Originalmente era pra ser um teste de unidade, por√©m o m√©todo onCreate() chama o m√©todo getContext() em sua execu√ß√£o, que s√≥ pode ser utilizado em testes instrumentados.
 
-* __Preparo dos testes__: O teste de cada funÁ„o È feito em um DB contendo apenas um item, sendo limpo e tendo a mesma entrada incluÌda apÛs cada teste
+* __Preparo dos testes__: O teste de cada fun√ß√£o √© feito em um DB contendo apenas um item, sendo limpo e tendo a mesma entrada inclu√≠da ap√≥s cada teste
 
 ```java
 @Before
@@ -28,7 +28,7 @@ public void tearDown() throws Exception {
 }
 ```
 
-* __delete()__: Tenta remover um objeto que contenha o mesmo tÌtulo do ˙nico objeto do DB, funciona se conseguir remover 1 objeto.
+* __delete()__: Tenta remover um objeto que contenha o mesmo t√≠tulo do √∫nico objeto do DB, funciona se conseguir remover 1 objeto.
 
 ```java
 @Test
@@ -56,7 +56,7 @@ public void insert() throws Exception {
 }
 ```
 
-* __onCreate()__: Executa o mÈtodo onCreate() de PodcastProvider. Se e somente se o provider tiver obtido uma inst‚ncia do PodcastDBHelper, retorna true. Funciona se provider tiver obtido esta inst‚ncia.
+* __onCreate()__: Executa o m√©todo onCreate() de PodcastProvider. Se e somente se o provider tiver obtido uma inst√¢ncia do PodcastDBHelper, retorna true. Funciona se provider tiver obtido esta inst√¢ncia.
 
 ```java
 //Teste
@@ -75,7 +75,7 @@ public boolean onCreate() {
 }
 ```
 
-* __query()__: Tenta buscar um objeto que est· no DB por seu tÌtulo, funciona se conseguir obter um.
+* __query()__: Tenta buscar um objeto que est√° no DB por seu t√≠tulo, funciona se conseguir obter um.
 
 ```java
 @Test
@@ -88,7 +88,7 @@ public void query() throws Exception {
 }
 ```
 
-* __update()__: Tenta alterar a descriÁ„o de um objeto no DB, funciona se conseguir alterar um objeto.
+* __update()__: Tenta alterar a descri√ß√£o de um objeto no DB, funciona se conseguir alterar um objeto.
 
 ```java
 @Test
@@ -99,3 +99,48 @@ public void update() throws Exception {
             PodcastProviderContract.TITLE + " =?", selectionArgs));
 }
 ```
+
+### ItemFeed
+
+Esta classe teve 9 m√©todos testados, a maioria s√£o getters e setters, ent√£o apenas os mais relevantes ser√£o abordados.
+
+* __Preparo dos testes__: Os testes foram feitos em 2 ItemFeeds, um preenchido e outro vazio.
+
+```java
+@Before
+public void setUp() throws Exception {
+    itemFeed = new ItemFeed(titulo, link, pubDate, description, downloadLink, uri);
+    itemFeed2 = new ItemFeed(null, null, null, null, null, null);
+}```
+
+* __getEstado()__: O estado do informa se o podcast daquele ItemFeed ainda n√£o foi baixado, est√° sendo baixado ou foi baixado. Quando o ItemFeed √© criado, se ele possuir um valor em _uri_, o estado inicial dele √© ItemFeed.NAO_BAIXOU, caso ele possua algum valor em uri, √© ItemFeed.BAIXOU.
+
+```java
+@Test
+public void getEstado() throws Exception {
+    assertEquals(ItemFeed.BAIXOU, itemFeed.getEstado());
+    assertEquals(ItemFeed.NAO_BAIXOU, itemFeed2.getEstado());
+}```
+
+* __getEstado()__: O estado n√£o √© final como os outros valores do ItemFeed porque ele √© atualizado ao iniciar e terminar o download dos podcasts, logo ele precisa de um setter testado.
+
+```java
+@Test
+public void setEstado() throws Exception {
+    itemFeed.setEstado(ItemFeed.BAIXANDO);
+    assertEquals(ItemFeed.BAIXANDO, itemFeed.getEstado());
+}```
+
+* __toCV()__: O m√©todo que converte o ItemFeed em um ContentValues √© usado na inser√ß√£o da lista de podcasts no banco de dados. Os valores inseridos no DB n√£o podem ser null, ent√£o √© preciso garantir que eles n√£o sejam.
+
+```java
+@Test
+public void toCV() throws Exception {
+    ContentValues cv = itemFeed2.toCV();
+    assertNotNull(cv.get(PodcastProviderContract.TITLE));
+    assertNotNull(cv.get(PodcastProviderContract.LINK));
+    assertNotNull(cv.get(PodcastProviderContract.DATE));
+    assertNotNull(cv.get(PodcastProviderContract.DESC));
+    assertNotNull(cv.get(PodcastProviderContract.DOWNLOAD_LINK));
+    assertNotNull(cv.get(PodcastProviderContract.FILE_URI));
+}```
