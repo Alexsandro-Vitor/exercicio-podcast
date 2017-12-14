@@ -25,7 +25,7 @@ public class ItemFeed {
         this.description = description;
         this.downloadLink = downloadLink;
         this.uri = uri;
-        this.estado = (uri.isEmpty()) ? NAO_BAIXOU : BAIXOU;
+        this.estado = (uri == null || uri.isEmpty()) ? NAO_BAIXOU : BAIXOU;
     }
 
     //Construtor que usa um cursor retornado de uma query ao DB
