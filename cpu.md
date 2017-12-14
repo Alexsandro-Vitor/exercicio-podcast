@@ -41,4 +41,24 @@ cerca de 40%.
 
 Em todos os casos o consumo de CPU baixa para 0% depois de um tempo.
 
-Comparando a versão modificada com a original, pode-se perceber que o RecyclerView não necessariamente economiza processamento, com todas as operações o envolvendo tendo o uso de CPU aumentado.
+Comparando a versão modificada com a original, pode-se perceber que o RecyclerView sozinho não necessariamente economiza processamento, com todas as operações o envolvendo tendo o uso de CPU aumentado.
+
+### Modificação 2: Singleton + Checagem de atualização ###
+
+Foi feito um singleton do RecyclerXmlFeedAdapter com o objetivo de evitar múltiplas criações do mesmo, devido a seu tamanho considerável. Porém, também era preciso reduzir o número de criações da lista de objetos do adapter, já que ela era uma grande parte do mesmo. Isso foi feito checando quando foi a última atualização do XML e só criando um novo ListView quando o antigo estiver desatualizado.
+
+* __Abertura do aplicativo:__ Ao abrir o aplicativo a CPU atingiu um pico de 40%, o que era esperado, já que ao abrir, o aplicativo ainda não gerou o singleton.
+
+* __Abertura e fechamento da EpisodeDetailActivity:__ Após abrir e fechar várias vezes a tela de detalhe do podcast, o uso da CPU chegou a picos de 27%.
+
+* __Scroll na tela inicial:__  Indo até o final da lista e voltando, o uso de CPU se manteve entre 10 e 20%, com pico de 21%. Com o movimento rápido do dedo para cima e para baixo, o pico foi de 16%.
+
+* __Download de podcast:__ Comportamento similar ao teste anterior.
+
+* __Segundo plano:__ Comportamento similar ao teste anterior.
+
+* __Execução de podcast:__ O consumo de CPU se manteve baixo, sem picos.
+
+Em todos os casos o consumo de CPU baixa para 0% depois de um tempo.
+
+O maior efeito foi com o EpisodeDetailActivity, ao retornar para a MainActivity com um singleton do adapter e sem a necessidade de realizar um novo download da lista de podcasts, foi possível reduzir o consumo de CPU reduziu consideravelmente na transição entre telas.
